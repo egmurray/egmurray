@@ -1,0 +1,104 @@
+/*
+#2B2B2B grey
+#DE1B1B red
+#F6F6F6 light grey
+#E9E581 light yellow
+*/
+
+body{
+	color:#505050;
+ 	font-family:Times; 
+	background-color:#F0F0F0;
+    font-size:1em;
+	}
+	
+body a{
+	text-decoration:none;
+	}
+
+h1{
+	background-color:#BFEBEB;
+	color:#FFF;
+	letter-spacing:0.3em;
+	text-align:center;
+	padding:0;
+	margin-bottom:0px;
+	margin-top:0px;
+	font-size:2em;
+	}
+
+h2{
+	font-size:1.2em;
+	}
+
+p{
+	line-height:1.5;
+	font-size:1em;
+	}
+	
+
+#mainName{
+	color:#FFFFFF;
+	font-style:normal;
+	text-decoration:none;
+	}
+
+html, body {
+	width:  100%;
+	height: 100%;
+	margin: 0px;
+}
+
+#centerBox{
+	margin:inherit;
+	border:none;
+	position:absolute;
+	top:10%;
+	left:10%;
+	width:80%;
+	}
+	
+#content{
+	float:right;
+	margin:inherit;
+	border:inherit;
+	width:75%;
+	}
+
+#navTable{
+	margin:0px;
+	width:20%;
+	border:inherit;
+	text-align:left;
+	float:left;
+	}
+
+#navTable a{
+	color:#38300A;}
+
+#navTable tr{
+/* 	color:#38300A; */
+	letter-spacing: 0.1em;
+	cursor:pointer;
+	font-weight:lighter;
+	}
+	
+#navTable td:hover{
+	background-color:#E9E581;
+	}
+
+.simulationButton{
+	text-indent:1em
+	}
+
+#adrienPhoto{
+	float:right;
+	width:30%;
+	margin:10px 0px 10px 15px;
+	}
+
+.projectImage{
+	float:right;
+	width:60%;
+	margin: 10px 0px 10px 15px;
+}

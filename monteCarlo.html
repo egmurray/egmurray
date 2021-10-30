@@ -1,0 +1,39 @@
+<canvas id="myCanvas" height="100px"></canvas>
+<p id="pi">Pi is about</p>
+<p>Simple approximation of pi. The number of dots inside the circle divided by the total number of dots gives a ratio of the areas of a circle inscribed in a square divided by the square.</p>
+
+<script type="text/javascript">
+allow_animation=true; // change this global variable to allow animation
+
+// parameters for scaling canvas
+var gridPixles = 10;
+var heightPercent = .60;
+var widthPercent = .60;
+var origWidth = Math.floor(window.innerWidth * widthPercent);
+var origHeight = Math.floor(window.innerHeight * heightPercent);
+var inCircle = 0;
+var total = 0; 
+var canvas = document.getElementById("myCanvas");
+var context = canvas.getContext("2d");
+context.canvas.width  = window.innerHeight * heightPercent;
+context.canvas.height = window.innerHeight * heightPercent;
+
+function animate(){
+	var x = Math.random();
+	var y = Math.random();
+	var xDist  = x - 0.5;
+	var yDist  = y - 0.5;
+	var inCircBool = ((xDist * xDist) + (yDist * yDist)) < .25 ;
+	context.beginPath();
+	context.arc(x * origHeight, y * origHeight, gridPixles/2, 0, Math.PI * 2, true);
+	context.fillStyle = inCircBool ? "#E4DBBF": "#70AB8F";
+	context.fill();	
+	total++;
+	if (inCircBool) inCircle++;
+	$("#pi").text("Pi is about " + inCircle * 4 / total);
+	if (allow_animation) requestAnimFrame(animate);
+}
+
+animate();     
+            																																																																				
+</script>

@@ -1,0 +1,75 @@
+<script type="text/javascript">
+allow_animation = true;
+
+// parameters for scaling canvas
+var gridPixles = 10;
+var heightPercent = .60;
+var widthPercent = .60;
+var xdim=Math.floor((window.innerWidth * widthPercent) / gridPixles);
+var ydim=Math.floor((window.innerHeight * heightPercent) / gridPixles);
+
+var lattice = init2dLattice(xdim, ydim, function(){return 0;});
+var x = 0;
+var y = 0;
+
+function animate(x, y, lattice){
+	var canvas = document.getElementById("myCanvas");
+	var context = canvas.getContext("2d");
+	context.canvas.width  = window.innerWidth * widthPercent;
+	context.canvas.height = window.innerHeight * heightPercent;
+	
+	lattice[x][y] = 0;
+	y++;
+	lattice[x][y] = 2;
+	if (y == ydim - 1 || 
+	lattice[x][y + 1] || 
+	lattice[(x+1) % xdim][y] || 
+	lattice[(x + xdim - 1) % xdim][y]){
+		lattice[x][y] = 1;
+		y=0;
+		x=Math.floor(Math.random() * xdim)
+		}
+		
+	var yToCheck = Math.floor(ydim * 0.20);
+	var hitMax = false;
+	
+	// check if reached max
+	for (i = 0; i< xdim; i++){
+		if (lattice[i][yToCheck]==1){
+				hitMax = true;
+				break;
+			}
+		}
+		
+	if (hitMax){
+		for (i = 0; i < xdim; i++){
+			for (j = ydim - 1; j >= 0; j--){
+				lattice[i][j] = lattice[i][j-1];
+				}
+			}
+		}
+	
+	//draw lattice
+	for (i = 0; i < xdim; i++){
+		for (j = 0; j < ydim; j++){
+			if (lattice[i][j]){
+				context.beginPath();
+				context.fillStyle = (lattice[i][j]==1) ? "#E4DBBF": "#70AB8F";
+				context.arc(i*gridPixles + gridPixles/2, j*gridPixles + gridPixles/2, gridPixles/2, 0, Math.PI * 2, true);
+				context.fill();	
+				}		
+		}
+	}
+	if (allow_animation) requestAnimFrame(function(){ animate(x, y, lattice);});
+}
+
+animate(x, y, lattice);     
+
+
+            																																																																				
+</script>
+
+
+<canvas id="myCanvas" width="100%" height="100px"></canvas>
+
+<p>This is a simple deposition model I learned about in ENGN 2920: Molecular Simulations during Spring 2012. A molecule "sticks" if it hits another molecule, or is falling and is adjacent to another molecule. This forms intricate patterns that can be fun to watch.</p>

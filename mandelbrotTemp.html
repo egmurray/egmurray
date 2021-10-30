@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Mandelbrot Fractal</title>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/nprogress.css" />
+<script type="text/javascript" src="../javascript/nprogress.js"></script>
+<style>
+* { margin: 0; padding: 0; font-family: "Courier New", Courier, monospace;font-size:1em;}
+body, html { height:100%; }
+.mainDiv {background-color:rgba(255,255,255,0.3);border-radius: 15px;padding:5px;margin:5px;}
+#myCanvas{position:absolute;}
+#optionsBox{position:absolute;left:3%;top: 5%; z-index: 2;}
+#statsBox{position:static;}
+#instructionsBox{position:absolute;left:3%;bottom: 5%; z-index: 2;}
+</style>
+</head>
+
+<body>
+<div id="optionsBox" class="mainDiv">
+<a id="statsToggle">[+]Options</a>
+<div id="statsBox">
+<FORM NAME="myform" ACTION="" METHOD="">
+Number of Reps: <INPUT id="repsInput" VALUE="30"><br>
+Scaling Factor: <INPUT id="scaleInput" VALUE="30"><br>
+Center X:       <INPUT id="xInput" VALUE="0"><br>
+Center Y:       <INPUT id="yInput" VALUE="0"><br>
+Animation:		<INPUT type="checkbox" id="animated" checked>
+<INPUT TYPE="button" NAME="button" Value="Redraw" onClick="drawFromForm()">
+</FORM>
+<script type="text/javascript"> 
+$('#statsToggle').click(function(){
+	$('#statsBox').toggle();
+	if ($('#statsBox').is(":visible")){
+		$(this).text($(this).text().replace("+", "-"))
+	} else {
+		$(this).text($(this).text().replace("-", "+"))
+	}
+});
+$('#statsBox').toggle();
+</script>
+</div>
+</div>
+
+<div id="instructionsBox" class="mainDiv">
+<p>Use the space bar to zoom and the arrow keys to move around.</p>
+</div>
+
+<canvas id="myCanvas" width="100px" height="100px"></canvas>
+<script type="text/javascript">
+//setup canvas to work on and make fullscreen
+var canvas = document.getElementById( "myCanvas" );
+var context = canvas.getContext("2d");
+context.canvas.width  = window.innerWidth;
+context.canvas.height = window.innerHeight;
+
+window.requestAnimFrame = (function(callback){
+	// function that requests new animation frame
+	return window.requestAnimationFrame ||
+	window.webkitRequestAnimationFrame ||
+	window.mozRequestAnimationFrame ||
+	window.oRequestAnimationFrame ||
+	window.msRequestAnimationFrame ||
+	function(callback){
+		window.setTimeout(callback, 1000/60);
+	};
+})();
+
+function next(z, c){
+	return [z[0] * z[0] - z[1] * z[1] + c[0], 2 * z[0] * z[1] + c[1]];
+}
+
+function score(c, reps){
+	var z = c;
+	for (var i=0; i<reps; i++) {
+		z = next(z, c);
+		if (isNaN(z[0])) {return i;}}	
+	return reps;
+}
+
+function zScore(c, reps){
+	var z = c;
+	for (var i=0; i<reps; i++) {z = next(z, c);}	
+	return z
+}
+
+function draw(reps, scale, xOffset, yOffset){
+	NProgress.start();
+    var imageData = context.createImageData(canvas.width, canvas.height);
+    
+	for (var i = 0; i<imageData.width; i++){
+		for (var j=0; j<imageData.height; j++){
+			var index = (i + j * imageData.width) * 4 // to account for 4 entries/pixel
+			s = score([(i - imageData.width  / 2)/scale - xOffset, 
+			           (j - imageData.height / 2)/scale - yOffset], reps);
+			imageData.data[index] = 256 * (1-s / reps);
+			imageData.data[index + 1] = 0;//256 * ( s / reps);
+			imageData.data[index + 2] = 256 * (1-s / reps);
+			imageData.data[index + 3] = 256; //* s / reps;
+		}
+	}
+	context.putImageData(imageData, 0, 0);
+	NProgress.done();
+}
+
+function animatedDraw(totalReps, scale, xOffset, yOffset){
+	
+	// make array to hold iteration values
+	var z = [];
+	var c = [];
+	var imageData = context.createImageData(canvas.width, canvas.height);
+	for (var i = 0; i<imageData.width; i++){
+		for (var j=0; j<imageData.height; j++){
+			var index = (i + j * imageData.width)
+			z[index] = [(i - imageData.width  / 2)/scale - xOffset, 
+			           (j - imageData.height / 2)/scale - yOffset];
+			c[index] = z[index]
+		}
+	}
+	indicies = [];
+	
+	// iterates and continues redrawing
+	function animatedDrawSub(reps){
+		for (var i = 0; i<z.length; i++){
+			var imageIndex = i * 4;
+			z[i] =  next(z[i], c[i]);
+			if (!isNaN(z[i][0])){
+				imageData.data[imageIndex] = 256 * (1 - reps / totalReps);
+				imageData.data[imageIndex + 1] = 0;
+				imageData.data[imageIndex + 2] = 256 * (1 - reps / totalReps);
+				imageData.data[imageIndex + 3] = 256;
+			}
+		}
+		
+		// redraw
+		context.putImageData(imageData, 0, 0);
+		
+		// repeat 
+		if (reps < totalReps) {
+			requestAnimFrame(function(){animatedDrawSub(reps + 1)});
+		}
+	}
+	
+	animatedDrawSub(0);
+}
+
+function drawFromForm(animated){ 
+	var reps = Number($('#repsInput').val());
+	var scale = Number($('#scaleInput').val());
+	var x = Number($('#xInput').val());
+	var y = Number($('#yInput').val());
+	if ($('#animated').is(':checked')){
+		animatedDraw(reps, scale, x, y);
+	} else {
+		draw(reps, scale, x, y);
+	}
+}
+
+drawFromForm(true);
+
+$(document).keydown(function(event){
+    var scale = Number($('#scaleInput').val());  // needed in all cases
+    var c = 100; // for scaling scale
+	if (event.which == 38){ // up
+		Number($('#yInput').val( Number($('#yInput').val()) + 1 / (scale/c) ))
+	} else if(event.which == 40){ // down
+		Number($('#yInput').val( Number($('#yInput').val()) - 1 / (scale/c) ))
+	}
+	else if(event.which == 37){ // left
+		Number($('#xInput').val( Number($('#xInput').val()) + 1 / (scale/c) ))
+	}
+	else if(event.which == 39){ // right
+		Number($('#xInput').val( Number($('#xInput').val()) - 1 / (scale/c) ))
+	}else if(event.which == 32){ // space
+		$('#scaleInput').val( Number($('#scaleInput').val())*2);
+	}
+	if ($.inArray(event.which, [32, 37, 38, 39, 40]) != -1){
+		drawFromForm(true);
+	}	
+});
+</script>
+</body>
+</html>

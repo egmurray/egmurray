@@ -1,0 +1,33 @@
+<h2>HotNet Restructuring and Optimization - 2012</h2>
+<img class="projectImage" src="/media/figures/hotnet.png">
+<p>During summer 2012, I worked on restructuring an implementation of an algorithm called <a href="http://compbio.cs.brown.edu/projects/hotnet/">HotNet</a> for the Raphael Research Group at Brown University. The algorithm takes in a graph, <i>G=(V,E)</i>, and a heat score for each vertex, <i>h(v)</i>. It returns the "hot" areas of the graph, where a significant amount of heat has accumulated. This is useful if you input a graph where the nodes are genes, and the edges are biological interactions between the proteins that those genes encode. Then, if <i>h(v)</i> is the number of cancer patients who have had gene <i>v</i> mutated, HotNet will return subnetworks of possible biological interest for tumorigenesis.</p>
+
+<p>I rewrote the algorithm in pure python and scipy, and redesigned it as a flexible python module, so one can just add <tt>import hotnet</tt> at the top of their code in order to access all of it's features. This flexibility is especially useful in a research environment, where the users needs are changing all the time and it needs to be easy to rewrite scripts to run many times on different datatypes. I added a statistical bootstrapping package to hotnet in order to asses the robustness of the subnetworks returned. Finally, the transition to scipy led to a speed increase of about 100x (although the runtime is still limited by the exponentiation of the matrix, a very costly operation).</p>
+
+<p>This was one of my most rewarding experiences at Brown, and I gained some solid coding and software engineering experience. For more info, <a href="http://online.liebertpub.com/doi/abs/10.1089/cmb.2010.0265">read the paper</a> (not by me, but it explains how it works) or visit the <a href="http://compbio.cs.brown.edu">lab website</a>!</p>
+
+<!-- 
+<h2>Molecular Simulator - 2012</h2>
+<p> After taking a molecular simulation class at Brown, I wanted to see how few lines of code I could use to write a working molecular simulator in OCaml that uses the simple <a href="http://en.wikipedia.org/wiki/Verlet_integration">Verlet Algorithm</a> to generate a text file that can be read into VMD (a simple molecular visualization software).
+ -->
+
+<h2>ENGN 2910: Molecular Simulations Final Project - 2011</h2>
+<img class="projectImage" src="/media/figures/ENGN2910.png">
+<p>For this project I studied the effect of various defect shapes on the deformation of a 2 dimensional solid by a rigid cylinder. I was specifically interested in when the first molecular lattice "slip" occurred, and qualitatively how the stress built up in the solid while it was being compressed by the cylinder.</p>
+ 
+<p>For all the simulations I used the molecular simulation package <a href="http://lammps.sandia.gov">LAMMPS</a> combined with Matlab for analysis and plotting. <a href="media/PDFs/ENGN2910-final.pdf">Here</a> is my final paper. Check out page 6 for all the cool figures!</p>
+
+<h2>Clathrates for Industrial Processes - 2011</h2>
+<img class="projectImage" src="/media/photos/clathrate.jpg">
+<p>My freshman summer I worked in the Rose-Petruck Physical Chemistry research group at Brown. My project was to assess the industrial uses of clathrate hydrates, a phase of water where an inert molecule is frozen into small cages made of water molecules. The most common form of clathrates are methane (CH<sub>4</sub>) clathrates that exist under many of the worlds deep and cold oceans.</p>
+
+<p>Clathrates are interesting because they have a greater thermal mass than normal ice, freeze at a higher temperature, and can trap high pressure gas (hence the burning methane clathrate in the picture). I was specifically interested in making clathrates of multiple gasses then unfreezing the clathrate slowly, so as to release different gasses at different times. This method has the potential to use waste energy (excess heat and only moderately cold temperatures) to separate gasses, which could be extremely useful in the filtration of pollutants and manufacture of chemicals.</p>
+
+<p>Through this work I gained experience in experiment design, assembly of reaction chambers, LabView programming, and proper presentation of scientific work. And I got really good at using a wrench.</p>
+
+<h2>Connect Four A.I. - 2011</h2>
+<p> For my CS17 class, I made a simple a.i. to play connect four, using the minimax algorithm in Ocaml. In the next couple weeks I hope to port it to this website.</p>
+
+
+<h2>Sheep Textbooks - 2010 to 2011</h2>
+<p>Started by my friend Jaap Ruoff in 2009, Sheep Textbooks  was a student-run textbook rental service with the goal of reducing the absurd price of textbooks for the students of Brown University. We ran all the purchasing of stock, advertising, and delivery out of our dorm rooms, but ultimately stopped because there seemed to be no way of getting around how labor intensive it was, despite the profits. <br/><br/> While running this business I was also taking a Creating Modern Web Applications class and had my first expierence with coding, while trying to build us a better website. Although the business ended, this exposure to computer science ended up being quite a life changing event.</p>

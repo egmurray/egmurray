@@ -1,0 +1,51 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/*
+#2B2B2B grey
+#DE1B1B red
+#F6F6F6 light grey
+#E9E581 light yellow
+*/
+
+body{
+	font-family:Verdana, Geneva, sans-serif;
+	background-color:#FFF;
+	font-size:0.75em;
+	}
+	
+body a{
+	text-decoration:none;
+	}
+
+h1{
+	background-color:#BFEBEB;
+	color:#FFF;
+	letter-spacing:0.3em;
+	text-align:center;
+	padding:0;
+	margin-bottom:0px;
+	margin-top:0px;
+	font-size:1.4em;
+	}
+
+h2{
+	font-size:1em;
+	color:#2B2B2B;}
+
+p {
+	color:#2B2B2B;
+	}
+
+#mainName{
+	color:#FFFFFF;
+	font-style:normal;
+	text-decoration:none;
+	}
+
+.socialIcon{
+	height:100%;
+}
+
+#footer{
+	height:10%;}

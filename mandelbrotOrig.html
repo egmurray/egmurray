@@ -1,0 +1,7 @@
+<p>The <a href="http://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a> is one of the most famous fractals and a beautiful topic for computational visualizations. It is defined as the set of all points <i>c</i> in the complex plane for which the series <i>z<sub>n+1</sub>= z<sub>n</sub><sup>2</sup>+c</i> remains bounded.</p> 
+
+<p>In order to visualize this, each pixel is assigned a point in the complex plane, then the series is computed for that point, until either the real or imaginary part of <i>z<sub>n</sub></i> is <tt>NaN</tt> for javascript. The default number of iterations is <i>n=30</i>, but it can be adjusted in the options box. The coloring is then based on how long it took the point to diverge (darker spots diverged later, and black spots are still contenders for being in the Mandelbrot set).</p>
+
+<a href="/html/mandelbrotVis.html">View Visualization</a> 
+
+<p> Note: this requires a good amount of resources so close other programs if you want it to run nice and smooth!</p>

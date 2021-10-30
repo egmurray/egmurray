@@ -1,0 +1,74 @@
+<script type="text/javascript">
+allow_animation = true;
+
+// parameters for scaling canvas
+var gridPixles = 15;
+var heightPercent = .60;
+var widthPercent = .60;
+var xdim=Math.floor((window.innerWidth * widthPercent) / gridPixles) + 1;
+var ydim=Math.floor((window.innerHeight * heightPercent) / gridPixles) + 1;
+
+
+// array for calculating probabilities
+var T = 4;
+function probsForTemp(T){
+	var allFourProb = Math.exp( (1/T) * -4) / (Math.exp((1/T)* -4) + Math.exp((1/T) * 4));
+	var oneOffProb = Math.exp( (1/T) * -2) / (Math.exp((1/T)* -2) + Math.exp((1/T) *2));
+	return [allFourProb, oneOffProb, .5, 1 - oneOffProb, 1 - allFourProb];
+};
+var p = probsForTemp(T);
+
+// set up lattice
+var lattice=init2dLattice(xdim, ydim, function(){return Math.floor(Math.random() * 2);});
+
+// listen if the slider changes
+ $('#tempSlider').change(function(){
+	 	$("#tempLabel").text("Temperature: " + this.value/100);
+        p = probsForTemp(this.value/100);
+});
+
+
+function animate(lattice){
+	var canvas = document.getElementById("myCanvas");
+	var context = canvas.getContext("2d");
+	context.canvas.width  = window.innerWidth * widthPercent;
+	context.canvas.height = window.innerHeight * heightPercent;
+	
+	// update lattice
+	var xlen=lattice.length;
+	var ylen=lattice[0].length;
+	for (i=0;i<5;i++){
+		var x=Math.floor(Math.random()*xlen)
+		var y=Math.floor(Math.random()*ylen)
+		if (Math.random()<p[lattice[x][(y+1)%ylen]+lattice[(x+1)%xlen][y]+lattice[x][(y-1+ylen)%ylen]+lattice[(x-1+xlen)%xlen][y]]){
+		lattice[x][y]=1;}
+		else{lattice[x][y]=0;}
+	};;
+	
+	// render
+	for (i=0;i<xlen;i++){
+		for (j=0;j<ylen;j++){
+			context.beginPath();
+			context.fillStyle = (lattice[i][j]) ? "#E4DBBF": "#70AB8F";
+			context.arc(i*gridPixles + gridPixles/2, j*gridPixles + gridPixles/2, gridPixles/2, 0, Math.PI * 2, true);
+			context.fill();
+		};
+	};
+	if (allow_animation) requestAnimFrame(function(){ animate(lattice); });
+}
+
+animate(lattice);
+
+            																																																																				
+</script>
+
+
+<canvas id="myCanvas" width="100%" height="100px"></canvas>
+<form>
+<p id="tempLabel">Temperature: 2.5</p><input id="tempSlider" type="range" min="0" max="500"/>
+</form>
+<p>This is a simple simulation of the <a href="http://en.wikipedia.org/wiki/Ising_model">Ising Model</a>, one of the first and simplest models in statistical mechanics. It is supposed to simulate the spin of the electrons in a ferromagnetic material. The main idea is that each atom (here represented by a dot) has a spin, either +1 or -1. It is a higher energy state to have an atom surrounded by atoms with different spins then it is to have an atom surrounded by atoms with the same spin. </p>
+
+<p>This means that at high temperatures the spins are more or less independent of their neighbors, because of the excess energy. However at low temperatures the model shows chunks of atoms with like spins forming, eventually converging to all one spin. The Ising Model is historically notable because of this phase transition (which occurs around a temperature of 2.29), where one can see distinct chunks start to melt away into randomness.</p>
+
+<p>I would like to credit Fall 2011 APMA 1690: Computational Probability and Statistics taught by Professor Matt Harrison with showing me this elegant simulation, which I later ported into the javascript you see here.</p>

@@ -1,0 +1,66 @@
+<script type="text/javascript">
+allow_animation=true; // change this global variable to allow animation
+
+// parameters for scaling canvas
+var gridPixles = 15;
+var heightPercent = .60;
+var widthPercent = .60;
+var xdim=Math.floor((window.innerWidth * widthPercent) / gridPixles) + 1;
+var ydim=Math.floor((window.innerHeight * heightPercent) / gridPixles) + 1;
+
+// for random walk
+var squareXY = new Array(24);
+var count = 0
+for (i=0; i < xdim; i++){
+	for (j=0; j < ydim; j++){
+		squareXY[count] = [i * gridPixles, j * gridPixles];
+		count++;
+	};
+};
+
+var movementSize = 1;
+$('#tempSlider').change(function(){
+	movementSize = this.value / 250;
+});
+
+
+function animate(squareXY){
+	var canvas = document.getElementById("myCanvas");
+	var context = canvas.getContext("2d");
+	context.canvas.width  = window.innerWidth * widthPercent;
+	context.canvas.height = window.innerHeight * heightPercent;
+	
+	var size=0;
+	for (i = 0; i < squareXY.length; i++){
+		//changing square locations
+		squareXY[i][0] += (Math.random() - .5) * movementSize;
+		squareXY[i][1] += (Math.random() - .5) * movementSize;
+	
+		// rendering squares
+		context.beginPath();
+		if (i%2 == 0) {
+			context.fillStyle = "#70AB8F";
+			size=10;
+		} else {
+			context.fillStyle = "rgba(228,219,191,.5)";
+			size=20;
+		};
+		context.arc(squareXY[i][0], squareXY[i][1], size, 0, Math.PI * 2, true);
+		//context.fill();
+		//context.lineWidth = 4;
+		context.fill();
+	};
+	
+	if (allow_animation) requestAnimFrame(function(){ animate(squareXY); });
+}            																																																																				
+
+animate(squareXY);     
+
+</script>
+
+
+<canvas id="myCanvas" width="100%" height="100px"></canvas>
+<form>
+<input id="tempSlider" type="range" min="0" max="500"/>
+</form>
+<p>A simple simulation where each dot is performing its own random walk. Drag the slider to change the jump size.</p>
